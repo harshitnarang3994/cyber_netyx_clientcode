@@ -3,9 +3,8 @@ import Container from "react-bootstrap/Container";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
-import InputGroup from "react-bootstrap/InputGroup";
+import Card from "react-bootstrap/Card";
 import ListGroup from "react-bootstrap/ListGroup";
-import FormControl from "react-bootstrap/FormControl";
 import { BASE_API_ROUTE } from "../utils/constant";
 export default class Task extends React.Component {
   constructor() {
@@ -108,18 +107,21 @@ export default class Task extends React.Component {
   renderTasks = () => {
     return this.state.tasks.map((task, id) => {
       return (
-        <InputGroup className="mt-3" key={id}>
-          <InputGroup.Prepend>
-            <InputGroup.Checkbox
-              aria-label={task.taskname}
+        <Card style={{ width: "100%" }} className="mt-3">
+          <Card.Body
+            style={task.status ? { backgroundColor: "lightgreen" } : {}}
+          >
+            <Card.Title>{task.taskname}</Card.Title>
+            <Card.Text>{task.taskdescription}</Card.Text>
+            <Button
+              variant="link"
               onClick={() => this.completeTask(task._id)}
               disabled={task.status}
-            />
-          </InputGroup.Prepend>
-          <ListGroup.Item disabled={task.status}>
-            {task.taskname}
-          </ListGroup.Item>
-        </InputGroup>
+            >
+              Mark as done
+            </Button>
+          </Card.Body>
+        </Card>
       );
     });
   };

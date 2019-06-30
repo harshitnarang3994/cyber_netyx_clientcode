@@ -3,9 +3,6 @@ import Container from "react-bootstrap/Container";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
-import InputGroup from "react-bootstrap/InputGroup";
-import ListGroup from "react-bootstrap/ListGroup";
-import FormControl from "react-bootstrap/FormControl";
 import Card from "react-bootstrap/Card";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
@@ -66,18 +63,7 @@ export default class Reminder extends React.Component {
     this.getReminders();
     this.handleClose();
   };
-  completeTask = async id => {
-    const result = await fetch(`${BASE_API_ROUTE}/updateTask/${id}`, {
-      method: "PUT",
-      body: JSON.stringify({ status: true }),
-      headers: {
-        "Content-Type": "application/json"
-        // 'Content-Type': 'application/x-www-form-urlencoded',
-      }
-    });
-    const resultJson = await result.json();
-    this.getTask();
-  };
+
   renderAddReminderModal = () => {
     return (
       <Modal show={this.state.show} onHide={this.handleClose}>
@@ -120,11 +106,13 @@ export default class Reminder extends React.Component {
     return (
       this.state.reminders &&
       this.state.reminders.map((task, id) => {
+        const reminderDate = new Date(task.reminderTime);
+        // const todayDate = new Date();
         return (
-          <Card className="mt-3">
-            <Card.Header as="h5"> {task.remindername}</Card.Header>
+          <Card style={{ width: "100%" }} className="mt-3" key={id}>
             <Card.Body>
-              <Card.Text>{task.reminderTime} </Card.Text>
+              <Card.Title>{task.remindername}</Card.Title>
+              <Card.Text>{reminderDate.toDateString()}</Card.Text>
             </Card.Body>
           </Card>
         );
@@ -132,7 +120,7 @@ export default class Reminder extends React.Component {
     );
   };
   renderNotificationModal = () => {
-    const nitication =
+    const notification =
       this.state.reminders &&
       this.state.reminders.filter(reminder => {
         const reminderDate = new Date(reminder.reminderTime);
@@ -140,15 +128,28 @@ export default class Reminder extends React.Component {
 
         return reminderDate.getDate() === todayDate.getDate();
       });
+    console.log(notification);
+
     return (
       <Modal show={this.state.showNotification} onHide={this.hideNotification}>
         <Modal.Header closeButton>
           <Modal.Title>Notification</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          {nitication && nitication.length > 0
-            ? nitication.map((reminder, id) => {
-                return <Card.Text>{reminder.remindername}</Card.Text>;
+          {notification && notification.length > 0
+            ? notification.map((reminder, id) => {
+                return (
+                  <Card style={{ width: "100%" }} className="mt-3" key={id}>
+                    <Card.Body>
+                      <Card.Title style={{ textAlign: "center" }}>
+                        Reminder:{id + 1}
+                      </Card.Title>
+                      <Card.Text style={{ textAlign: "center" }}>
+                        {reminder.remindername}
+                      </Card.Text>
+                    </Card.Body>
+                  </Card>
+                );
               })
             : "No reminder"}
         </Modal.Body>
@@ -165,7 +166,7 @@ export default class Reminder extends React.Component {
             </Button>
           </Col>
           <Col>
-            <Button variant="danger" onClick={this.showNotification}>
+            <Button variant="primary" onClick={this.showNotification}>
               {" "}
               Notification
             </Button>

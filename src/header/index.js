@@ -1,21 +1,16 @@
 import React from "react";
-import Nav from "react-bootstrap/Nav";
+import Navbar from "react-bootstrap/Navbar";
 export default class Header extends React.Component {
   render() {
     return (
-      <Nav variant="tabs" defaultActiveKey="/home">
-        <Nav.Item>
-          <Nav.Link href="/home">Active</Nav.Link>
-        </Nav.Item>
-        <Nav.Item>
-          <Nav.Link eventKey="link-1">Option 2</Nav.Link>
-        </Nav.Item>
-        <Nav.Item>
-          <Nav.Link eventKey="disabled" disabled>
-            Disabled
-          </Nav.Link>
-        </Nav.Item>
-      </Nav>
+      <Navbar style={{ backgroundColor: "#0e0e0e", color: "#fff" }}>
+        <Navbar.Brand
+          style={{ color: "#fff", width: "100%", fontFamily: "sans-serif" }}
+        >
+          <h2>Scheduler App</h2>
+        </Navbar.Brand>
+        <Navbar.Toggle />
+      </Navbar>
     );
   }
 }
